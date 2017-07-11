@@ -16,6 +16,8 @@ The script will proceed with following
 * Clone down Aseprite repository, then compile and build for latest release as tagged on Github (can be either beta or release version)
 * Created `.app` bundle at `~/Applications`
 
+> `Aseprite.app` is pre-created bundle file to wrap soon-to-be-built Aseprite. It contains script to execute an aseprite binary file with default executable path at `~/Applications/Aseprite/aseprite`. Such bundle file is created with macOS's Script Editor application.
+
 # Support Aseprite
 
 Aseprite is cool. It is free if you build it by yourself like you did above, or you can purchase it at [official website](https://www.aseprite.org/) to avoid spending effort in manual build process.
