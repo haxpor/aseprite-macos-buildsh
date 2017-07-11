@@ -3,10 +3,13 @@ Automated script to create latest release (can be beta, or release) of Aseprite 
 
 # How to Build
 
-Just execute `aseprite.sh`. 
+Just execute `aseprite.sh`. Then open `Aseprite` application.
 
-It will finally create `Aseprite.app` at `~/Applications` which is default.  
-Next, you can open Aseprite by either search through Spotlight, or double click on such file.
+## Configurations
+
+* `SDK_ROOT`
+
+In case you have different path for Xcode application, you need to change it inside `aseprite.sh` for `SDK_ROOT` variable. Change it before you execute the script.
 
 # Behind the Scene
 
