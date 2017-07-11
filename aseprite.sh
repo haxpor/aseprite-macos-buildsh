@@ -4,7 +4,7 @@
 # This is for macOS build version.
 
 # Define your build settings here
-SDK_ROOT="/Volumes/Slave/Applications/Xcode8.3/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk"
+SDK_ROOT="~/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk"
 
 git clone --recursive https://github.com/aseprite/aseprite.git
 cd aseprite
