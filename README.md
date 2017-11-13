@@ -1,15 +1,39 @@
 # aseprite-macos-buildsh
 Automated script to create latest release (can be beta, or release) of Aseprite for macOS
 
+Project is updated against aseprite v.1.2.4 build workflow.
+
 # How to Build
 
-Just execute `aseprite.sh`. Then open `Aseprite` application.
+Just execute `bash aseprite.sh`. Then open `Aseprite` application.
 
-## Configurations
+If the application asks for root password, enter it. This is to be able to execute command to properly set environment path variable.
 
-* `SDK_ROOT`
+## Command line Configuration
 
-In case you have different path for Xcode application, you need to change it inside `aseprite.sh` for `SDK_ROOT` variable. Change it before you execute the script.
+In case you want to install aseprite to different path, or your `xcode-select` is not set properly, you can use either `--sdk-root` and `--target` to properly set things up before building.
+
+* `--sdk-root`
+
+	To set your latest MacOS SDK root as part of Xcode toolchain. By default it will query current prefix-value from `xcode-select` and append it with `/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk`. But in case, it doesn't work or `xcode-select` didn't do the work, you can use this option to manually specify it.
+
+* `--target`
+
+	To set you target path to install aseprite. By default it will be at `/Applications` but it might be different for some users.
+
+So for example, you will execute
+
+
+Normal, barebone version with no parameters.
+
+```shell
+bash aseprite.sh
+```
+
+With custom parameters to specify SDK_ROOT and TARGET
+```shell
+bash aseprite.sh --sdk-root /Volumes/Slave/Applications/YourCustomDir/Xcode.app/Contents/Developer --target ~/YourCustomDir/Appliations
+```
 
 # Behind the Scene
 

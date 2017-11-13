@@ -3,40 +3,152 @@
 # Script to automate building latest release of Aseprite (it can be release or beta build)
 # This is for macOS build version.
 
-# Define your build settings here
-SDK_ROOT="~/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk"
+POSTFIXPATH_SDKROOT=Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk
+CCPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
+CXXPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
+SDK_ROOT=`xcode-select -p`
+TARGET="/Applications"
 
-git clone --recursive https://github.com/aseprite/aseprite.git
+# temporary value for returned value from function
+TEMP_RET=""
+
+# find value of target param --xxx if there's any, if not then TEMP_RET will still be empty "", else it will contain value from finding
+# param 1 - parameter key name
+# param 2 - program list of param, usually is $@
+# return 1 if it found, and TEMP_RET is set, otherwise return 0. TEMP_RET will be always set to "" (empty) at the beginning of this function.
+function findValueOfParam() {
+	# set empty to temporary return variable first
+	TEMP_RET=""
+
+	count=$#
+	argv=($@)
+
+	for (( i=1; i<count; i++ )); do
+		if [ ${argv[i]} = "$1" ]; then
+			TEMP_RET=${argv[i+1]}
+			return 0
+		fi
+	done
+
+	return 1
+}
+
+# check if there's any input parameters
+if [ $(($# % 2)) -ne 0 ]; then
+	echo "Missing some parameter value"
+	exit 1
+fi
+
+# set the input argument
+if [ "$#" -ne 0 ]; then
+	# if only one parameter
+	findValueOfParam "--sdk-root" $@
+
+	if [ $? -eq 0 ]; then
+		# orvewrite set sdk-root
+		SDK_ROOT=$TEMP_RET
+
+		# set to xcode-select as well
+		sudo xcode-select -s "$SDK_ROOT"
+		echo "Set SDK_ROOT to $SDK_ROOT"
+	fi
+	
+	findValueOfParam "--target" $@
+	if [ $? -eq 0 ]; then
+		# orvewrite set sdk-root
+		TARGET=$TEMP_RET
+		echo "Set TARGET to $TARGET"
+	fi
+fi
+
+# check if aseprite directory exists, so we has no need to clone from repository again
+if [ ! -d aseprite ]; then
+	git clone --recursive https://github.com/aseprite/aseprite.git
+fi
+
+# change to aseprite directory
 cd aseprite
-git pull
+
+# checkout master branch
+git checkout master
+
+# clear the current dirty state of git repository
+git reset --hard
+git clean -fd
+
+# fetch all the update down
+git fetch --all
 git submodule update --init --recursive
 
 # compile skia
-
 cd ..
-mkdir deps
+# check to create deps directory if not exist
+if [ ! -d deps ]; then
+	mkdir deps
+fi
 cd deps
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-git clone https://github.com/aseprite/skia.git
+
+# check if depot_tools is already cloned
+if [ ! -d depot_tools ]; then
+	git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+fi
+
+# check if skia is already cloned
+if [ ! -d skia ]; then
+	git clone https://github.com/aseprite/skia.git
+fi
+
+# clear the dirty state of both repositories
+cd depot_tools
+git reset --hard
+git clean -fd
+git fetch --all
+
+# change dir back
+cd ../
+
+cd skia
+git reset --hard
+git clean -fd
+git fetch --all
+
+# change dir back
+cd ../
+
+# continue the operation
 export PATH="${PWD}/depot_tools:${PATH}"
 cd skia
-git checkout aseprite-m55
-python bin/sync-and-gyp
+
+# get proper skia's branch to compile
+SKIA_BRANCH=`curl "https://raw.githubusercontent.com/aseprite/aseprite/master/INSTALL.md" | perl -n -e '/(aseprite-m\d{2}).+?/ && print $1'`
+git checkout $SKIA_BRANCH
+python tools/git-sync-deps
+gn gen out/Release --args="is_official_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false"
 ninja -C out/Release dm
 
 cd ../../
 
 # compile aseprite
 cd aseprite
-mkdir build
+# create build dir (if needed)
+if [ ! -d build ]; then
+	mkdir build
+fi
 cd build
-git checkout `git describe --tags`  # checkout the latest tag release
-cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 -DCMAKE_OSX_SYSROOT=$SDK_ROOT -DUSE_ALLEG4_BACKEND=OFF -DUSE_SKIA_BACKEND=ON -DSKIA_DIR="${PWD}/../../deps/skia" -DWITH_HarfBuzz=OFF -G Ninja ..
+
+# checkout the latest tag (release or beta)
+git checkout `git describe --tags`
+cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 -DCMAKE_OSX_SYSROOT="$SDK_ROOT/$POSTFIXPATH_SDKROOT" -DUSE_ALLEG4_BACKEND=OFF -DUSE_SKIA_BACKEND=ON -DSKIA_DIR="${PWD}/../../deps/skia" -DWITH_HarfBuzz=OFF -G Ninja ..
 ninja aseprite # when finish, build file will be at aseprite/build/bin
 
-# move result to default ~/Applications
-mv bin ~/Applications/Aseprite
-# copy application bundle to result
-cp -Rp ../../Aseprite.app ~/Applications/Aseprite.app
-
-echo "Done!"
+# if everything went fine then do final operations
+if [ $? -eq 0 ]; then
+	# remove existing Aseprite if installed
+	if [ -d "$TARGET/Aseprite" ]; then
+		rm -rf "$TARGET/Aseprite"
+	fi
+	# move result to default ~/Applications
+	mv bin "$TARGET/Aseprite"
+	# copy application bundle to result
+	cp -Rp ../../Aseprite.app "$TARGET/Aseprite.app"
+fi
