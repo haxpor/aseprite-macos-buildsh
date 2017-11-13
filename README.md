@@ -23,6 +23,11 @@ In case you want to install aseprite to different path, or your `xcode-select` i
 
 So for example, you will execute
 
+```
+bash aseprite.sh --sdk-root /Volumes/Slave/Applications/Xcode8.3/Xcode.app/Contents/Developer --target ~/slave/Applications
+```
+
+Note that the current build system for aseprite only supports buliding against macOS 10.12. 10.13 didn't work as I tested it.
 
 Normal, barebone version with no parameters.
 
