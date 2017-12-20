@@ -1,7 +1,7 @@
 # aseprite-macos-buildsh
 Automated script to create latest release (can be beta, or release) of Aseprite for macOS
 
-Project is updated against aseprite v.1.2.4 build workflow.
+Project is updated against aseprite v.1.2.6 build workflow.
 
 # How to Build
 
