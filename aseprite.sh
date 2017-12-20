@@ -3,7 +3,7 @@
 # Script to automate building latest release of Aseprite (it can be release or beta build)
 # This is for macOS build version.
 
-POSTFIXPATH_SDKROOT=Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk
+POSTFIXPATH_SDKROOT=Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk
 CCPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
 CXXPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
 SDK_ROOT=`xcode-select -p`
@@ -124,7 +124,7 @@ SKIA_BRANCH=`curl "https://raw.githubusercontent.com/aseprite/aseprite/master/IN
 git checkout $SKIA_BRANCH
 python tools/git-sync-deps
 gn gen out/Release --args="is_official_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false"
-ninja -C out/Release dm
+ninja -C out/Release
 
 cd ../../
 
