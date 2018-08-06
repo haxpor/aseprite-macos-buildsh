@@ -3,6 +3,14 @@ Automated script to create latest release (can be beta, or release) of Aseprite 
 
 Project is updated against aseprite v.1.2.6 build workflow.
 
+# Pre-Requisite
+
+You need to install Xcode by downloading it [here](https://developer.apple.com/download/).
+
+After successfully installed, you install Xcode's toolchain by executing `xcode-select --install` then follow along when popup shown up.
+
+Now you're ready to use this script.
+
 # How to Build
 
 Just execute `bash aseprite.sh`. Then open `Aseprite` application.
