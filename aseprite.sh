@@ -78,6 +78,7 @@ git clean -fd
 
 # fetch all the update down
 git fetch --all
+git pull
 git submodule update --init --recursive
 
 # compile skia
@@ -103,6 +104,7 @@ cd depot_tools
 git reset --hard
 git clean -fd
 git fetch --all
+git pull
 
 # change dir back
 cd ../
@@ -111,6 +113,7 @@ cd skia
 git reset --hard
 git clean -fd
 git fetch --all
+git pull
 
 # change dir back
 cd ../
@@ -123,7 +126,7 @@ cd skia
 SKIA_BRANCH=`curl "https://raw.githubusercontent.com/aseprite/aseprite/master/INSTALL.md" | perl -n -e '/(aseprite-m\d{2}).+?/ && print $1'`
 git checkout $SKIA_BRANCH
 python tools/git-sync-deps
-gn gen out/Release --args="is_official_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false"
+gn gen out/Release --args="is_official_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false extra_cflags_cc=[\"-frtti\"]"
 ninja -C out/Release
 
 cd ../../
@@ -135,6 +138,10 @@ if [ ! -d build ]; then
 	mkdir build
 fi
 cd build
+
+# prepare environment variables
+export CC="$SDK_ROOT/$CCPATH_TOOLCHAIN"
+export CXX="$SDK_ROOT/$CXXPATH_TOOLCHAIN"
 
 # checkout the latest tag (release or beta)
 git checkout `git describe --tags`

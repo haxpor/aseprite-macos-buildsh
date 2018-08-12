@@ -1,7 +1,7 @@
 # aseprite-macos-buildsh
 Automated script to create latest release (can be beta, or release) of Aseprite for macOS
 
-Project is updated against aseprite v.1.2.6 build workflow.
+Project is updated against aseprite v.1.2.9 build workflow.
 
 # Pre-Requisite
 
@@ -51,12 +51,18 @@ bash aseprite.sh --sdk-root /Volumes/Slave/Applications/YourCustomDir/Xcode.app/
 # Behind the Scene
 
 The script will proceed with following
-* Clone down Skia repository, and its dependencies required to bulid Aseprite
+* Clone down Aseprite and Skia repository, and its dependencies required to bulid Aseprite.
 * Compile and build dependencies
 * Clone down Aseprite repository, then compile and build for latest release as tagged on Github (can be either beta or release version)
 * Created `.app` bundle at `~/Applications`
 
 > `Aseprite.app` is pre-created bundle file to wrap soon-to-be-built Aseprite. It contains script to execute an aseprite binary file with default executable path at `~/Applications/Aseprite/aseprite`. Such bundle file is created with macOS's Script Editor application.
+
+# Notes
+
+* If you previously clone any dependencies, the script will know and will instead try to update it from upstream for you. So you're ensured that it will operate on the most latest __release state__ version of Aseprite.
+* Updated version of Aseprite might break cloned dependencies's build workflow especially error about `CC` or `CXX` environment variables are not set to correct path. If this is a case, it's likely that you re-build on previously compiled source code of dependencies in which `cmake` still keeps the old configurations used in successfully compile. To resolve the problem, remove the whole build folder namedly `aseprite` then start it all over executing `aseprite.sh` script. 
+* In case you want to build older version of Aseprite, take a look at [Releases](https://github.com/haxpor/aseprite-macos-buildsh/releases) section then find a corresponding target version of Aseprite you look for.
 
 # Support Aseprite
 
