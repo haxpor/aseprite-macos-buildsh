@@ -3,7 +3,7 @@
 # Script to automate building latest release of Aseprite (it can be release or beta build)
 # This is for macOS build version.
 
-POSTFIXPATH_SDKROOT=Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk
+POSTFIXPATH_SDKROOT=Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk
 CCPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
 CXXPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
 SDK_ROOT=`xcode-select -p`
@@ -123,11 +123,11 @@ export PATH="${PWD}/depot_tools:${PATH}"
 cd skia
 
 # get proper skia's branch to compile
-SKIA_BRANCH=`curl "https://raw.githubusercontent.com/aseprite/aseprite/master/INSTALL.md" | perl -n -e '/(aseprite-m\d{2}).+?/ && print $1'`
+SKIA_BRANCH=$(curl "https://raw.githubusercontent.com/aseprite/aseprite/master/INSTALL.md" | grep "aseprite-m[0-9][0-9]" | sed -n '1p' | perl -n -e '/(aseprite-m\d\d)/ && print $1')
 git checkout $SKIA_BRANCH
 python tools/git-sync-deps
-gn gen out/Release --args="is_official_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false extra_cflags_cc=[\"-frtti\"]"
-ninja -C out/Release
+gn gen out/Release --args="is_official_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_libwebp=false extra_cflags_cc=[\"-frtti\"]"
+ninja -C out/Release skia
 
 cd ../../
 
@@ -145,7 +145,16 @@ export CXX="$SDK_ROOT/$CXXPATH_TOOLCHAIN"
 
 # checkout the latest tag (release or beta)
 git checkout `git describe --tags`
-cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 -DCMAKE_OSX_SYSROOT="$SDK_ROOT/$POSTFIXPATH_SDKROOT" -DUSE_ALLEG4_BACKEND=OFF -DUSE_SKIA_BACKEND=ON -DSKIA_DIR="${PWD}/../../deps/skia" -DWITH_HarfBuzz=OFF -G Ninja ..
+cmake \
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+  -DCMAKE_OSX_ARCHITECTURES=x86_64 \
+  -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
+  -DCMAKE_OSX_SYSROOT="$SDK_ROOT/$POSTFIXPATH_SDKROOT" \
+  -DLAF_OS_BACKEND=skia \
+  -DSKIA_DIR="${PWD}/../../deps/skia" \
+  -DSKIA_OUT_DIR="${PWD}/../../deps/skia/out/Release" \
+  -G Ninja \
+  .. && \
 ninja aseprite # when finish, build file will be at aseprite/build/bin
 
 # if everything went fine then do final operations

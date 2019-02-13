@@ -1,7 +1,7 @@
 # aseprite-macos-buildsh
-Automated script to create latest release (can be beta, or release) of Aseprite for macOS
+Automated script to create latest release (whatever it will be either development snapshot commit, beta, or release) of Aseprite for macOS
 
-Project is updated against aseprite v.1.2.9 build workflow.
+Project is updated against aseprite v.1.2.10 build workflow.
 
 # Pre-Requisite
 
@@ -35,8 +35,6 @@ So for example, you will execute
 bash aseprite.sh --sdk-root /Volumes/Slave/Applications/Xcode8.3/Xcode.app/Contents/Developer --target ~/slave/Applications
 ```
 
-Note that the current build system for aseprite only supports buliding against macOS 10.12. 10.13 didn't work as I tested it.
-
 Normal, barebone version with no parameters.
 
 ```shell
@@ -60,9 +58,11 @@ The script will proceed with following
 
 # Notes
 
+## for building v1.2.9
+
 * If you previously clone any dependencies, the script will know and will instead try to update it from upstream for you. So you're ensured that it will operate on the most latest __release state__ version of Aseprite.
 * Updated version of Aseprite might break cloned dependencies's build workflow especially error about `CC` or `CXX` environment variables are not set to correct path. If this is a case, it's likely that you re-build on previously compiled source code of dependencies in which `cmake` still keeps the old configurations used in successfully compile. To resolve the problem, remove the whole build folder namedly `aseprite` then start it all over executing `aseprite.sh` script. 
-* In case you want to build older version of Aseprite, take a look at [Releases](https://github.com/haxpor/aseprite-macos-buildsh/releases) section then find a corresponding target version of Aseprite you look for.
+* ~~In case you want to build older version of Aseprite, take a look at [Releases](https://github.com/haxpor/aseprite-macos-buildsh/releases) section then find a corresponding target version of Aseprite you look for.~~ - won't work, will stick to latest version only
 
 # Support Aseprite
 
