@@ -5,9 +5,14 @@ Project is updated against aseprite v.1.2.10 build workflow.
 
 # Pre-Requisite
 
-You need to install Xcode by downloading it [here](https://developer.apple.com/download/).
+You need
 
-After successfully installed, you install Xcode's toolchain by executing `xcode-select --install` then follow along when popup shown up.
+* Xcode
+* [CMake](http://www.cmake.org/) (3.4 or greater)
+* [Ninja](https://ninja-build.org/) build system
+* Python 2.x ([version 3](https://github.com/haxpor/aseprite-macos-buildsh/issues/2) didn't work)
+
+For Xcode, you need to install it by downloading [here](https://developer.apple.com/download/). After successfully installed, execute `xcode-select --install` to install its toolchina, then finally follow along as dialog popup shows up.
 
 Now you're ready to use this script.
 
