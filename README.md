@@ -32,13 +32,14 @@ In case you want to install aseprite to different path, or your `xcode-select` i
 
 * `--target`
 
-	To set you target path to install aseprite. By default it will be at `/Applications` but it might be different for some users.
+	To set you target path to install aseprite. By default it will be at `/Applications` but it might be different for some users. In case you use this parameter, please see [#3](https://github.com/haxpor/aseprite-macos-buildsh/issues/3).
 
 So for example, you will execute
 
 ```
 bash aseprite.sh --sdk-root /Volumes/Slave/Applications/Xcode8.3/Xcode.app/Contents/Developer --target ~/slave/Applications
 ```
+**note** if you use `--target`, please see [#3](https://github.com/haxpor/aseprite-macos-buildsh/issues/3).
 
 Normal, barebone version with no parameters.
 
