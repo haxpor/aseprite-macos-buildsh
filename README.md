@@ -18,7 +18,7 @@ Now you're ready to use this script.
 
 # How to Build
 
-Just execute `bash aseprite.sh`. Then open `Aseprite` application.
+Just execute `bash ./aseprite.sh`. Then open `Aseprite` application.
 
 If the application asks for root password, enter it. This is to be able to execute command to properly set environment path variable.
 
