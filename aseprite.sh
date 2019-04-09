@@ -165,6 +165,21 @@ if [ $? -eq 0 ]; then
 	fi
 	# move result to default ~/Applications
 	mv bin "$TARGET/Aseprite"
-	# copy application bundle to result
-	cp -Rp ../../Aseprite.app "$TARGET/Aseprite.app"
+  # check to create target directory
+  if [ -d "$TARGET/Aseprite.app" ]; then
+    # if found then copy all the contents of our template .app instead
+    # this is to avoid risking removing any user' files the app might created
+    echo "Target Aseprite.app directory found, copying contents of template .app to target location instead"
+	  # copy application bundle to result
+	  cp -Rp ../../Aseprite.app/* "$TARGET/Aseprite.app/"
+    echo "All done"
+  else
+    # if not, then just copy the whole template .app directory to target
+    echo "Copying template .app to target location"
+	  # copy application bundle to result
+	  cp -Rp ../../Aseprite.app "$TARGET/Aseprite.app"
+    echo "All done"
+  fi
+else
+  echo "Something went wrong"
 fi
