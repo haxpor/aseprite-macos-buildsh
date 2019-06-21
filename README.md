@@ -12,13 +12,13 @@ You need
 * [Ninja](https://ninja-build.org/) build system
 * Python 2.x ([version 3](https://github.com/haxpor/aseprite-macos-buildsh/issues/2) didn't work)
 
-For Xcode, you need to install it by downloading [here](https://developer.apple.com/download/). After successfully installed, execute `xcode-select --install` to install its toolchina, then finally follow along as dialog popup shows up.
+For Xcode, you need to install it by downloading [here](https://developer.apple.com/download/). After successfully installed, execute `xcode-select --install` to install its toolchain, then finally follow along as dialog popup shows up.
 
 Now you're ready to use this script.
 
 # How to Build
 
-Just execute `bash ./aseprite.sh`. Then open `Aseprite` application.
+Just execute `bash aseprite.sh`. Then open `Aseprite` application.
 
 If the application asks for root password, enter it. This is to be able to execute command to properly set environment path variable.
 
@@ -28,11 +28,11 @@ In case you want to install aseprite to different path, or your `xcode-select` i
 
 * `--sdk-root`
 
-	To set your latest MacOS SDK root as part of Xcode toolchain. By default it will query current prefix-value from `xcode-select` and append it with `/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk`. But in case, it doesn't work or `xcode-select` didn't do the work, you can use this option to manually specify it.
+	To set your latest macOS SDK root as part of Xcode toolchain. By default it will query current prefix-value from `xcode-select` and append it with `/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk`. But in case, it doesn't work or `xcode-select` didn't do the work, you can use this option to manually specify it.
 
 * `--target`
 
-	To set you target path to install aseprite. By default it will be at `/Applications` but it might be different for some users. In case you use this parameter, please see [#3](https://github.com/haxpor/aseprite-macos-buildsh/issues/3).
+	To set you target path to install aseprite. By default it will be at `/Applications` but some users might want it differently. In case you use this parameter, please see [#3](https://github.com/haxpor/aseprite-macos-buildsh/issues/3).
 
 So for example, you will execute
 
@@ -67,7 +67,7 @@ The script will proceed with following
 ## for building v1.2.9
 
 * If you previously clone any dependencies, the script will know and will instead try to update it from upstream for you. So you're ensured that it will operate on the most latest __release state__ version of Aseprite.
-* Updated version of Aseprite might break cloned dependencies's build workflow especially error about `CC` or `CXX` environment variables are not set to correct path. If this is a case, it's likely that you re-build on previously compiled source code of dependencies in which `cmake` still keeps the old configurations used in successfully compile. To resolve the problem, remove the whole build folder namedly `aseprite` then start it all over executing `aseprite.sh` script. 
+* Updated version of Aseprite might break cloned dependencies's build workflow especially error about `CC` or `CXX` environment variables are not set to correct path. If this is a case, it's likely that you re-build on previously compiled source code of dependencies in which `cmake` still keeps the old configurations used in successful compile. To resolve the problem, remove the whole build folder namedly `aseprite` then start it all over again. 
 * ~~In case you want to build older version of Aseprite, take a look at [Releases](https://github.com/haxpor/aseprite-macos-buildsh/releases) section then find a corresponding target version of Aseprite you look for.~~ - won't work, will stick to latest version only
 
 # Support Aseprite
@@ -76,7 +76,7 @@ Aseprite is cool. It is free if you build it by yourself like you did above, or 
 
 # Credits
 
-This automated build script gathers information from Aseprite's [INSTALL.md](https://github.com/aseprite/aseprite/blob/master/INSTALL.md) on how to build, and sum it up together as automated script you're using it here.
+This automated build script gathers information from Aseprite's [INSTALL.md](https://github.com/aseprite/aseprite/blob/master/INSTALL.md) on how to build, and sum it up together as automated script you're using here.
 
 # License
 [MIT](https://github.com/haxpor/aseprite-macos-buildsh/blob/master/LICENSE), Wasin Thonkaew
