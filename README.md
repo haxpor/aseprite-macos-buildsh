@@ -20,7 +20,7 @@ Now you're ready to use this script.
 
 Just execute `bash aseprite.sh`. Then open `Aseprite` application.
 
-If the application asks for root password, enter it. This is to be able to execute command to properly set environment path variable.
+If the script asks for root password, enter it. This is to be able to execute command to properly set environment path variable. It's safe, the script never try to do anything beside trying to build the app successfully.
 
 ## Command line Configuration
 
