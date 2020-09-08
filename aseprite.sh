@@ -3,7 +3,7 @@
 # Script to automate building latest release of Aseprite (it can be release or beta build)
 # This is for macOS build version.
 
-POSTFIXPATH_SDKROOT=Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk
+POSTFIXPATH_SDKROOT=Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk
 CCPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
 CXXPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
 SDK_ROOT=`xcode-select -p`
@@ -152,7 +152,8 @@ cmake \
   -DCMAKE_OSX_SYSROOT="$SDK_ROOT/$POSTFIXPATH_SDKROOT" \
   -DLAF_OS_BACKEND=skia \
   -DSKIA_DIR="${PWD}/../../deps/skia" \
-  -DSKIA_OUT_DIR="${PWD}/../../deps/skia/out/Release" \
+  -DSKIA_LIBRARY_DIR="${PWD}/../../deps/skia/out/Release" \
+  -DSKIA_LIBRARY="${PWD}/../../deps/skia/out/Release/libskia.a" \
   -G Ninja \
   .. && \
 ninja aseprite # when finish, build file will be at aseprite/build/bin
