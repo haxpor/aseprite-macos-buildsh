@@ -1,6 +1,8 @@
 # aseprite-macos-buildsh
 Automated script to create latest release (whatever it will be either development snapshot commit, beta, or release) of Aseprite for macOS
 
+Update : Added support x64 Architecture build for SKIA on MacOS
+
 Project is updated against aseprite v.1.2.10 build workflow.
 
 # Pre-Requisite
