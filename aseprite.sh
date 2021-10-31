@@ -3,7 +3,7 @@
 # Script to automate building latest release of Aseprite (it can be release or beta build)
 # This is for macOS build version.
 
-POSTFIXPATH_SDKROOT=Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk
+POSTFIXPATH_SDKROOT=Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 CCPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
 CXXPATH_TOOLCHAIN=Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
 SDK_ROOT=`xcode-select -p`
@@ -69,8 +69,8 @@ fi
 # change to aseprite directory
 cd aseprite
 
-# checkout master branch
-git checkout master
+# checkout the latest tag (release or beta)
+git checkout `git describe --tags`
 
 # clear the current dirty state of git repository
 git reset --hard
@@ -123,7 +123,7 @@ export PATH="${PWD}/depot_tools:${PATH}"
 cd skia
 
 # get proper skia's branch to compile
-SKIA_BRANCH=$(curl "https://raw.githubusercontent.com/aseprite/aseprite/master/INSTALL.md" | grep "aseprite-m[0-9][0-9]" | sed -n '1p' | perl -n -e '/(aseprite-m\d\d)/ && print $1')
+SKIA_BRANCH=$(curl "https://raw.githubusercontent.com/aseprite/aseprite/main/INSTALL.md" | grep "aseprite-m[0-9][0-9]" | sed -n '1p' | perl -n -e '/(aseprite-m\d\d)/ && print $1')
 git checkout $SKIA_BRANCH
 
 python tools/git-sync-deps
